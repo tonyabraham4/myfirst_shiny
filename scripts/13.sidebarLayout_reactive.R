@@ -1,10 +1,3 @@
-# Add reactive data frame
-# We ended the previous chapter with an app that allows you to download a data file with selected variables from the movies dataset. 
-# We will now extend this app by adding a table output of the selected data as well. Given that the same dataset will be used in two outputs, 
-# it makes sense to make our code more efficient by using a reactive data frame.
-
-
-
 library(shiny)
 library(dplyr)
 library(readr)
@@ -47,14 +40,13 @@ server <- function(input, output) {
   
   # Create reactive data frame
   movies_selected <- reactive({
-    _ # ensure input$selected_var is available
-    ___ # select columns of movies
+    req(input$selected_var) # ensure input$selected_var is available
+    movies %>% select(input$selected_var) # select columns of movies
   })
   
   # Create data table
   output$moviestable <- DT::renderDataTable({
-    req(input$selected_var)
-    DT::datatable(data = movies %>% select(input$selected_var), 
+    DT::datatable(data = movies_selected(), 
                   options = list(pageLength = 10), 
                   rownames = FALSE)
   })
