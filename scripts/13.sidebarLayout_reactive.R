@@ -1,3 +1,9 @@
+# Add reactive data frame
+# We ended the previous chapter with an app that allows you to download a data file with selected variables 
+# from the movies dataset. We will now extend this app by adding a table output of the selected data as well. 
+# Given that the same dataset will be used in two outputs, it makes sense to make our code more efficient by using a reactive data frame.
+
+
 library(shiny)
 library(dplyr)
 library(readr)
@@ -58,10 +64,10 @@ server <- function(input, output) {
     },
     content = function(file) { 
       if(input$filetype == "csv"){ 
-        write_csv(movies %>% select(input$selected_var), file) 
+        write_csv(movies_selected(), file) 
       }
       if(input$filetype == "tsv"){ 
-        write_tsv(movies %>% select(input$selected_var), file) 
+        write_tsv(movies_selected(), file) 
       }
     }
   )
