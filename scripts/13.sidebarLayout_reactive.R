@@ -47,7 +47,7 @@ server <- function(input, output) {
   
   # Create reactive data frame
   movies_selected <- reactive({
-    ___ # ensure input$selected_var is available
+    _ # ensure input$selected_var is available
     ___ # select columns of movies
   })
   
