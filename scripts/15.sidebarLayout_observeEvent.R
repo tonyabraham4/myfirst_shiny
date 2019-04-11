@@ -99,14 +99,14 @@ server <- function(input, output, session) {
   
   # Tabulate frequencies of types of sampled movies
   output$sample_tt_info <- renderTable({
-    movies_selected() %>% 
+    movies_sample() %>% 
       count(title_type) %>%
       rename(`Title type` = title_type, Frequency = n)
   })
   
   # Plot sampled movies
   output$scatterplot <- renderPlot({
-    ggplot(data = movies_selected(), aes_string(x = input$x, y = input$y)) +
+    ggplot(data = movies_sample(), aes_string(x = input$x, y = input$y)) +
       geom_point()
   })
   

@@ -1,3 +1,4 @@
+
 # Find missing reactives
 # In the following app code there should be two reactive expressions: movies_subset and pretty_plot_title. 
 # Both of these are used in multiple spots in the app so we would like to define them once, and refer to them multiple times. 
