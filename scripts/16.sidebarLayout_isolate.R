@@ -73,7 +73,7 @@ server <- function(input, output, session) {
   output$scatterplot <- renderPlot({
     ggplot(data = movies, aes_string(x = input$x, y = input$y, color = input$z)) +
       geom_point(alpha = input$alpha, size = input$size) +
-      labs( title = input$plot_title )
+      labs( title = isolate({input$plot_title}) )
   })
   
 }
