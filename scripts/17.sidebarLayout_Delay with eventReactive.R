@@ -80,12 +80,13 @@ ui <- fluidPage(
 )
 
 # Define server function required to create the scatterplot-
-server <- function(input, output) {
+server <- function(input, output, session) {
   
   # New plot title
   new_plot_title <- eventReactive(
     eventExpr = input$update_plot_title, 
-    valueExpr = { toTitleCase(input$plot_title) }
+    valueExpr = { toTitleCase(input$plot_title) },
+    ignoreNULL = FALSE
   )
   
   # Create scatterplot object the plotOutput function is expecting 
