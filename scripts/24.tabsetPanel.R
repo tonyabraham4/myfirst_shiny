@@ -1,3 +1,10 @@
+# Reorganize your app with tabs
+# The app that we have been working with got pretty complex. We can organize the outputs a bit better using tabs.
+
+# Reorganize your app into two tabs:
+# Tab 1 should be called "Plot" and should contain the scatterplot, a line break, and the h5() header text for number of observations.
+# Tab 2 should be called "Data" and should contain a line break and the data table. The line break will place the table a little below the top of the tab.
+# Remove the third level headings above each of these components, since the tab titles serve the same purpose.
 
 
 library(shiny)
@@ -80,15 +87,16 @@ ui <- fluidPage(
     mainPanel(
       
       # Tab 1: Plot
-      tabsetPanel(type = "Plot",
-                  plotOutput(outputId = "scatterplot"),
-                  br(),                 
-                  h5(textOutput("description"))), 
-      
-      # Tab 2: Data
-      tabsetPanel(type = "Data",
-                  br(),
-                  DT::dataTableOutput(outputId = "moviestable"))
+      tabsetPanel(type = "tabs",
+                  tabPanel(title = "Plot",    
+                           plotOutput(outputId = "scatterplot"),
+                           br(),                 
+                           h5(textOutput("description"))), 
+                  
+                  # Tab 2: Data
+                  tabPanel(title = "Data",
+                           br(),
+                           DT::dataTableOutput(outputId = "moviestable")))
       
     )
   )
