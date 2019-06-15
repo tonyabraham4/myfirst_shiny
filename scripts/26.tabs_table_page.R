@@ -1,5 +1,3 @@
-
-
 library(shiny)
 library(readr)
 library(ggplot2)
@@ -92,64 +90,66 @@ ui <- fluidPage(
                   # New tab panel for Codebook
                   tabPanel(title = "Codebook",
                            br(),
-                           dataTableOutput(OutputID ="codebook")
-                           
-                  )
+                           dataTableOutput(outputId = "codebook"))
+                  
       )
     )
   )
-  
+)
 
+# Define server function required to create the scatterplot
+server <- function(input, output, session) {
   
-  # Define server function required to create the scatterplot
-  server <- function(input, output, session) {
-    
-    # Create a subset of data filtering for selected title types
-    movies_selected <- reactive({
-      req(input$selected_type) # ensure availablity of value before proceeding
-      filter(movies, title_type %in% input$selected_type)
-    })
-    
-    # x and y as reactive expressions
-    x <- reactive({ toTitleCase(str_replace_all(input$x, "_", " ")) })
-    y <- reactive({ toTitleCase(str_replace_all(input$y, "_", " ")) })
-    
-    # Create scatterplot object the plotOutput function is expecting 
-    output$scatterplot <- renderPlot({
-      ggplot(data = movies_selected(), aes_string(x = input$x, y = input$y)) +
-        geom_point() +
-        labs(x = x(),
-             y = y(),
-             color = toTitleCase(str_replace_all(input$z, "_", " ")),
-             title = toTitleCase(input$plot_title))
-    })
-    
-    # Create description of plot
-    output$description <- renderText({
-      paste("The plot above shows the relationship between",
-            x(),
-            "and",
-            y(),
-            "for",
-            nrow(movies_selected()),
-            "movies.")
-    })
-    
-    # Print data table if checked
-    output$moviestable <- renderDataTable(
-      if(input$show_data){
-        datatable(data = movies_selected()[, 1:6], 
-                  options = list(pageLength = 10), 
-                  rownames = FALSE)
-      }
-    )
-    
-    # Render data table for codebook
-    output$codebook <- renderDataTable(
-      datatable(data = movies_codebook))
-    
-  }
+  # Create a subset of data filtering for selected title types
+  movies_selected <- reactive({
+    req(input$selected_type) # ensure availablity of value before proceeding
+    filter(movies, title_type %in% input$selected_type)
+  })
   
-  # Create Shiny app object
-  shinyApp(ui = ui, server = server)
+  # x and y as reactive expressions
+  x <- reactive({ toTitleCase(str_replace_all(input$x, "_", " ")) })
+  y <- reactive({ toTitleCase(str_replace_all(input$y, "_", " ")) })
   
+  # Create scatterplot object the plotOutput function is expecting 
+  output$scatterplot <- renderPlot({
+    ggplot(data = movies_selected(), aes_string(x = input$x, y = input$y)) +
+      geom_point() +
+      labs(x = x(),
+           y = y(),
+           color = toTitleCase(str_replace_all(input$z, "_", " ")),
+           title = toTitleCase(input$plot_title))
+  })
+  
+  # Create description of plot
+  output$description <- renderText({
+    paste("The plot above shows the relationship between",
+          x(),
+          "and",
+          y(),
+          "for",
+          nrow(movies_selected()),
+          "movies.")
+  })
+  
+  # Print data table if checked
+  output$moviestable <- renderDataTable(
+    if(input$show_data){
+      datatable(data = movies_selected()[, 1:6], 
+                options = list(pageLength = 10), 
+                rownames = FALSE)
+    }
+  )
+  
+  # Render data table for codebook
+  output$codebook <- renderDataTable({
+    datatable(data = movies_codebook, 
+              options = list(pageLength = 10, lengthMenu = c(10, 25, 40)),
+              rownames = FALSE)
+    
+    
+  })
+  
+}
+
+# Create Shiny app object
+shinyApp(ui = ui, server = server)
